@@ -17,8 +17,9 @@ function myObject() {
     myObject.create = function(obj) {
         console.log("dynamic call");
         //myObject.prototype = obj;
-        obj.__proto__ = myObject.prototype;
-        return obj;
+        newO = Object.create(obj);
+        newO.__proto__ = myObject.prototype;
+        return newO;
     }
 
 }
@@ -36,8 +37,14 @@ myObject.prototype.create = function(prototypes) {
     return t;
 }
 
+myObject.prototype.call = function(funcName, parameters) {
+    console.log("calling for " + funcName);
+    return Function.call(funcName, parameters);
+}
+
 test = new myObject().create({tail: 4, ears: 2});
 clyde = myObject.create({tail: 4, ears: 2});
+// obj1 = myObject.create(null);
 fred = clyde.create();
 
 fred.tail = 10;
@@ -54,8 +61,18 @@ console.log("fred: " + fred.tail);
 // console.log(o.__proto__.__proto__)
 //
 // console.log(o.__proto__.__proto__.__proto__)
-// //var obj0 = o.create(null);
-// obj0.func = function(arg) { return "func0: " + arg; };
+var obj0 = myObject.create(null);
+obj0.func = function(arg) { return "func0: " + arg; };
+
+var obj1 = myObject.create([obj0]);
+
+var obj2 = myObject.create([]);
+obj2.func = function(arg) { return "func2: " + arg; };
+
+var obj3 = myObject.create([obj1, obj2]);
+var result = obj3.call("func", ["hello"]) ;
+console.log("should print ’func0: hello’ ->", result);
+
 
 //var o2
 //var o = myObject.create(null);
