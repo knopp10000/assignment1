@@ -10,20 +10,17 @@ myObject.create = function(prototypes) {
 };
 
 myObject.prototype.call = function find(funcName, parameters) {
-    console.log("calling for " + funcName);
     this.prototypes.forEach(function(prototype){
         if(funcName in prototype){
-            console.log("FOUND YOU");
             var attribute = prototype[funcName];
             if(typeof attribute === 'function'){
                 finalFunc = eval(attribute)(parameters);
-                console.log(finalFunc);
                 return finalFunc;
             }
         }else if (prototype instanceof myObject){
            prototype.call(funcName, parameters);
         }
-    });
+    }); return finalFunc;
     
 };
 
@@ -37,7 +34,8 @@ var obj3 = myObject.create([obj2, obj]);
 
 var test = obj2.call("func1", ["yeet"]);
 var result = obj3.call("func1", ["yeet"]);
-console.log();
+
+console.log(result);
 
 // myObject.create = function(obj) {
 //     console.log("static call");
