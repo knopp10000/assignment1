@@ -1,16 +1,4 @@
-/*
-function myObject() {
-    this.__proto__.create = function(prototypeN) {
-        myObject.prototype = prototypeN;
-        return myObject();
-    }
-    this.test = 5;
-}
-myObject.prototype.create = function (prototypeN) {
-    myObject.prototype = prototypeN;
-    return myObject();
-}
-*/
+
 function myObject() {};
 
 myObject.create = function(prototypes) {
@@ -21,7 +9,7 @@ myObject.create = function(prototypes) {
     return newO;
 };
 
-myObject.prototype.call = function (funcName, parameters) {
+myObject.prototype.call = function find(funcName, parameters) {
     console.log("calling for " + funcName);
     this.prototypes.forEach(function(prototype){
         if(funcName in prototype){
@@ -32,8 +20,8 @@ myObject.prototype.call = function (funcName, parameters) {
                 console.log(finalFunc);
                 return finalFunc;
             }
-        }else{
-            console.log(funcName + " was not in " + this.name);
+        }else if (prototype instanceof myObject){
+           prototype.call(funcName, parameters);
         }
     });
     
@@ -45,8 +33,9 @@ var obj1 = myObject.create([]);
 obj1.func1 = function(arg) {return "func1: " + arg;};
 var obj2 = myObject.create([obj1]);
 obj2.func2 = function(arg) { return "func2: " + arg; };
-var obj3 = myObject.create([obj2, obj1, obj]);
- 
+var obj3 = myObject.create([obj2, obj]);
+
+var test = obj2.call("func1", ["yeet"]);
 var result = obj3.call("func1", ["yeet"]);
 console.log();
 
