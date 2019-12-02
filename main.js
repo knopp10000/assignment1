@@ -9,6 +9,7 @@ myObject.create = function(prototypes) {
     return newO;
 };
 
+/*
 myObject.prototype.call = function find(funcName, parameters) {
     this.prototypes.forEach(function(prototype){
         if(funcName in prototype){
@@ -22,7 +23,42 @@ myObject.prototype.call = function find(funcName, parameters) {
         }
     }); return finalFunc;
     
+}; */
+
+
+myObject.prototype.call = function (funcName, parameters) {
+    result = undefined;
+    this.prototypes.forEach(function(prototype){
+        if (result == null){
+            if(funcName in prototype){
+                console.log("FOUND YOU");
+                var attribute = prototype[funcName];
+                if(typeof attribute === 'function'){
+                    result = eval(attribute)(parameters)
+                    console.log("eval: " + result)
+                    return;
+                }
+            }else{
+                if (prototype.prototypes != null){
+                    console.log("gonna look in obj0")
+                    return prototype.call(funcName, parameters);
+                }else{
+                    //result = undefined; //unnecessary
+                }
+            }
+        }
+    });
+    return result;
 };
+
+var obj0 = myObject.create(null);
+obj0.func = function(arg) { return "func0: " + arg; };
+var obj1 = myObject.create([obj0]);
+var obj2 = myObject.create([]);
+obj2.func = function(arg) { return "func2: " + arg; };
+var obj3 = myObject.create([obj1, obj2]);
+var result = obj3.call("func", ["hello"]) ;
+console.log("should print ’func0: hello’ ->", result);
 
 var obj = myObject.create([]);
 obj.func = function(arg) {return "func: " + arg;};
