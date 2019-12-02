@@ -12,56 +12,43 @@ myObject.prototype.create = function (prototypeN) {
 }
 */
 function myObject() {};
-myObject.prototype.prototypes = [];
 
-myObject.create = function(prototypes, name) {
-    // this.prototype.prototypes = prototypes;
-    // this.prototype.name = name;
+myObject.create = function(prototypes) {
     console.log("dynamic call");
-    // myObject.prototype = obj;
     newO = {};
     newO.__proto__ = myObject.prototype;
     newO.prototypes = prototypes;
-    newO.name = name;
     return newO;
 };
 
 myObject.prototype.call = function (funcName, parameters) {
     console.log("calling for " + funcName);
-    //console.log("prototypes: " + this.name);
     this.prototypes.forEach(function(prototype){
         if(funcName in prototype){
+            console.log("FOUND YOU");
             var attribute = prototype[funcName];
             if(typeof attribute === 'function'){
-                return eval(attribute)(parameters);
-                // return Function.call(attribute, parameters);
+                finalFunc = eval(attribute)(parameters);
+                console.log(finalFunc);
+                return finalFunc;
             }
         }else{
             console.log(funcName + " was not in " + this.name);
         }
     });
-    console.log("function was not found")
-    //return eval("this." + funcName + "(\"" + parameters + "\")");
-    // var fn = window[funcName];
-    // // is object a function?
-    // if (typeof fn === "function"){
-    //     return fn.apply(null, parameters);
-    // }
+    
 };
 
-kalle = myObject.create(null, "kalle");
-oskar = myObject.create(null, "oskar");
-console.log(myObject.prototype.isPrototypeOf(kalle));
-console.log("kalle: " + kalle.name);
-console.log("oskar: " + oskar.name);
-console.log("kalle: " + kalle.name);
-
-var obj2 = myObject.create([], "obj2");
-obj2.func = function(arg) { return "func2: " + arg; };
-
-var obj3 = myObject.create([obj2], "obj3")
-var result = obj3.call("func", ["hejsan"])
-console.log("result: " + result);
+var obj = myObject.create([]);
+obj.func = function(arg) {return "func: " + arg;};
+var obj1 = myObject.create([]);
+obj1.func1 = function(arg) {return "func1: " + arg;};
+var obj2 = myObject.create([obj1]);
+obj2.func2 = function(arg) { return "func2: " + arg; };
+var obj3 = myObject.create([obj2, obj1, obj]);
+ 
+var result = obj3.call("func1", ["yeet"]);
+console.log();
 
 // myObject.create = function(obj) {
 //     console.log("static call");
