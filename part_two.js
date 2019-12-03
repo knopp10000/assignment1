@@ -1,7 +1,7 @@
 function createClass(className, superClassList){
     let newClass = {};
     newClass.className = className;
-    newClass.superClasses = superClassList;
+    newClass.superClasses = (superClassList != null)? superClassList : [];
     newClass.call = function (funcName, parameters) {
         let result = undefined;
         if (funcName in newClass){
@@ -23,6 +23,15 @@ function createClass(className, superClassList){
         newInstance.__proto__ = newClass;
         return newInstance;
     };
+    newClass.addSuperClass = function (newSuperClass) {
+        for (let i = 0; i < this.superClasses.length; i++) {
+            if (this === newSuperClass.superClasses[i]) {
+                console.log("ERRROORRRRROOORRR!");
+                return;
+            }
+        }
+        this.superClasses.push(newSuperClass);
+    }
     return newClass;
 }
 
@@ -50,3 +59,10 @@ class0.func = function(arg) { return "func0: " + arg; };
 var obj0 = class0.new();
 result = obj0.call("func", ["hello"]);
 console.log(result);
+
+var class0 = createClass("Class 0", null);
+var class1 = createClass("Class 1", [class0]);
+var class2 = createClass("Class 2", [class1]);
+
+class0.addSuperClass(class2);
+

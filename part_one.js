@@ -1,18 +1,24 @@
-
 function myObject() {};
 
 myObject.create = function(prototypes) {
     let newO = {};
     newO.__proto__ = myObject.prototype;
-    newO.prototypes = prototypes;
+    if (prototypes != null)
+        newO.prototypes = prototypes;
+    else
+        newO.prototypes = [];
     return newO;
 };
 
-myObject.prototypes = [];
 
 myObject.prototype.addPrototype = function(prototypeToBe){
-    let temp = this.prototypes;
-    this.prototypes = temp + prototypeToBe;
+    for (let i = 0; i < prototypeToBe.prototypes.length; i++) {
+        if (this === prototypeToBe.prototypes[i]) {
+            console.log("ERRROORRRRROOORRR!");
+            return;
+        }
+    }
+    this.prototypes.push(prototypeToBe);
 };
 
 
