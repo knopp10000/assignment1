@@ -8,6 +8,13 @@ myObject.create = function(prototypes) {
     return newO;
 };
 
+myObject.prototypes = [];
+
+myObject.prototype.addPrototype = function(prototypeToBe){
+    let temp = this.prototypes;
+    this.prototypes = temp + prototypeToBe;
+};
+
 
 myObject.prototype.call = function (funcName, parameters) {
     let result = undefined;
@@ -48,6 +55,8 @@ obj0.func = function(arg) { return "func0: " + arg; };
 result = obj0.call("func", ["hello"]);
 console.log("should print ’func0: hello’ ->", result);
 
-
+var obj0 = myObject.create(null);
+var obj1 = myObject.create([obj0]);
+obj0.addPrototype(obj1);
 
 
