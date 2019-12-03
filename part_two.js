@@ -10,9 +10,9 @@ function createClass(className, superClassList){
                 return eval(attribute)(parameters);
             }
         }else if (this.superClasses != null){
-            this.superClasses.forEach(function(clas){
+            this.superClasses.forEach(function(c){
                 if (result === undefined){
-                    result = clas.call(funcName, parameters);
+                    result = c.call(funcName, parameters);
                 }
             });
         }
@@ -23,15 +23,25 @@ function createClass(className, superClassList){
         newInstance.__proto__ = newClass;
         return newInstance;
     };
-    newClass.addSuperClass = function (newSuperClass) {
+    newClass.addSuperClass = function(superClassToBe){
+        if (superClassToBe.hasSuperclass(this)){
+            console.log("ERRROORRRRROOORRR!");
+        }else{
+            this.superClasses.push(superClassToBe);
+        }
+    };
+    newClass.hasSuperclass = function(superClass) {
         for (let i = 0; i < this.superClasses.length; i++) {
-            if (this === newSuperClass.superClasses[i]) {
-                console.log("ERRROORRRRROOORRR!");
-                return;
+            if (superClass === this.superClasses[i]) {
+                return true;
+            } else {
+                if(this.superClasses[i].hasSuperclass(superClass)){
+                    return true;
+                }
             }
         }
-        this.superClasses.push(newSuperClass);
-    }
+        return false;
+    };
     return newClass;
 }
 
@@ -62,7 +72,5 @@ console.log(result);
 
 var class0 = createClass("Class 0", null);
 var class1 = createClass("Class 1", [class0]);
-var class2 = createClass("Class 2", [class1]);
-
-class0.addSuperClass(class2);
+class0.addSuperClass(class1);
 
