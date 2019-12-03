@@ -7,20 +7,27 @@ myObject.create = function(prototypes) {
         newO.prototypes = prototypes;
     else
         newO.prototypes = [];
+    newO.addPrototype = function(prototypeToBe){
+        if (prototypeToBe.hasPrototype(this)){
+            console.log("ERRROORRRRROOORRR!");
+        }else{
+            this.prototypes.push(prototypeToBe);
+        }
+    };
+    newO.hasPrototype = function(prototype) {
+        for (let i = 0; i < this.prototypes.length; i++) {
+            if (prototype === this.prototypes[i]) {
+                return true;
+            } else {
+                if(this.prototypes[i].hasPrototype(prototype)){
+                    return true;
+                }
+            }
+        }
+        return false;
+    };
     return newO;
 };
-
-
-myObject.prototype.addPrototype = function(prototypeToBe){
-    for (let i = 0; i < prototypeToBe.prototypes.length; i++) {
-        if (this === prototypeToBe.prototypes[i]) {
-            console.log("ERRROORRRRROOORRR!");
-            return;
-        }
-    }
-    this.prototypes.push(prototypeToBe);
-};
-
 
 myObject.prototype.call = function (funcName, parameters) {
     let result = undefined;
