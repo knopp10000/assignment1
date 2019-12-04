@@ -1,3 +1,6 @@
+//Karl Gustafsson
+//Magnus Palmstierna
+
 function createClass(className, superClassList){
     let newClass = {};
     newClass.className = className;
@@ -25,7 +28,7 @@ function createClass(className, superClassList){
     };
     newClass.addSuperClass = function(superClassToBe){
         if (superClassToBe.hasSuperclass(this)){
-            console.log("ERRROORRRRROOORRR!");
+            console.log("Error, no circular inheritance allowed.");
         }else{
             this.superClasses.push(superClassToBe);
         }

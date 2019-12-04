@@ -1,3 +1,6 @@
+//Karl Gustafsson
+//Magnus Palmstierna
+
 function myObject() {};
 
 myObject.create = function(prototypes) {
@@ -9,7 +12,7 @@ myObject.create = function(prototypes) {
         newO.prototypes = [];
     newO.addPrototype = function(prototypeToBe){
         if (prototypeToBe.hasPrototype(this)){
-            console.log("ERRROORRRRROOORRR!");
+            console.log("Error, no circular inheritance allowed.");
         }else{
             this.prototypes.push(prototypeToBe);
         }
