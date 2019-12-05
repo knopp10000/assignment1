@@ -1,5 +1,8 @@
-//Karl Gustafsson
-//Magnus Palmstierna
+/**
+ * Grupp 6
+ * Karl Gustafsson
+ * Magnus Palmstierna
+ **/
 
 function createClass(className, superClassList){
     let newClass = {};

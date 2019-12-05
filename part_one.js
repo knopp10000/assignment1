@@ -1,11 +1,30 @@
-//Karl Gustafsson
-//Magnus Palmstierna
+/**
+ * Grupp 6
+ * Karl Gustafsson
+ * Magnus Palmstierna
+ **/
+let myObject = {};
 
-function myObject() {};
+myObject.__proto__.call = function (funcName, parameters) {
+    let result = undefined;
+    if (funcName in this){
+        let attribute = this[funcName];
+        if(typeof attribute === 'function') {
+            return eval(attribute)(parameters);
+        }
+    }else if (this.prototypes != null){
+        this.prototypes.forEach(function(prototype){
+            if (result === undefined){
+                result = prototype.call(funcName, parameters);
+            }
+        });
+    }
+    return result;
+};
 
 myObject.create = function(prototypes) {
     let newO = {};
-    newO.__proto__ = myObject.prototype;
+    newO.__proto__ = myObject.__proto__;
     if (prototypes != null)
         newO.prototypes = prototypes;
     else
@@ -32,22 +51,7 @@ myObject.create = function(prototypes) {
     return newO;
 };
 
-myObject.prototype.call = function (funcName, parameters) {
-    let result = undefined;
-    if (funcName in this){
-        let attribute = this[funcName];
-        if(typeof attribute === 'function') {
-            return eval(attribute)(parameters);
-        }
-    }else if (this.prototypes != null){
-        this.prototypes.forEach(function(prototype){
-            if (result === undefined){
-                result = prototype.call(funcName, parameters);
-            }
-        });
-    }
-    return result;
-};
+
 
 var obj0 = myObject.create(null);
 obj0.func = function(arg) { return "func0: " + arg; };
